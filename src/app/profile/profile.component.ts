@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable, Observer, catchError, delay, forkJoin, throwError } from 'rxjs';
+import { Observable, Observer, Subject, Subscription, catchError, debounce, debounceTime, delay, forkJoin, of, switchMap, throwError } from 'rxjs';
 import { ApiService } from '../shared/apiService.service';
 
 @Component({
@@ -11,8 +11,32 @@ export class ProfileComponent {
   profileData$!: Observable<any>;
   tasksData$!: Observable<any[]>;
   tasksIdData$!: Observable<any[]>;
+  
 
-  constructor(private dataService: ApiService) {}
+
+  tasksIdBySearchData$: Observable<any[]> | undefined;
+  onSearchTask = new Subject<number>();
+
+  constructor(private dataService: ApiService) {
+    this.onSearchTask.pipe(
+      debounceTime(500),
+      switchMap((searchTaskId) => {
+        return this.dataService.getTasksIdBySearch(searchTaskId);
+      })
+    )
+      .subscribe((value) => {
+        if (Array.isArray(value)) {
+          this.tasksIdBySearchData$ = of(value);
+        } else if (typeof value === 'object' && value !== null) {
+          this.tasksIdBySearchData$ = of([value]);
+        } else {
+          console.error('Invalid data returned:', value);
+        }
+      });
+  }
+
+
+
 
   ngOnInit() {
     this.loadProfileData();
@@ -25,6 +49,7 @@ export class ProfileComponent {
 
     this.tasksIdData$ = this.tripleRequestTask();
     this.tasksIdData$.subscribe(tasksDataId$);
+
   }
 
   loadProfileData() {
@@ -52,5 +77,14 @@ export class ProfileComponent {
     const tasks2$ = this.dataService.getTasksID(2);
     const tasks3$ = this.dataService.getTasksID(3);
     return forkJoin([tasks1$, tasks2$, tasks3$]);
+  }
+
+  searchId(searchTaskId: string): void {
+    const taskIdAsNumber: number = parseInt(searchTaskId, 10);
+    if (!isNaN(taskIdAsNumber)) {
+      this.onSearchTask.next(taskIdAsNumber);
+    } else {
+      console.error('Invalid task ID:', searchTaskId);
+    }
   }
 }

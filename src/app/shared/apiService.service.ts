@@ -35,6 +35,16 @@ export class ApiService {
     );
   }
 
+  getTasksIdBySearch(id: number): Observable<any> {
+    const apiUrlGetTasksId = `http://103.13.31.37:17444/api/tasks/${id}}`;
+
+    return this.http.get(apiUrlGetTasksId).pipe(
+      catchError(this.handleError),
+      map((data: any) => data)
+    );
+  }
+
+
   private handleError(error: any) {
     console.error('An error occurred:', error);
     return throwError(error);
