@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable, Observer, Subject, Subscription, catchError, debounce, debounceTime, delay, forkJoin, of, switchMap, throwError } from 'rxjs';
+import { Observable, Observer, Subject, Subscription, catchError, debounce, debounceTime, delay, forkJoin, of, switchMap, tap, throwError } from 'rxjs';
 import { ApiService } from '../shared/apiService.service';
 
 @Component({
@@ -54,6 +54,7 @@ export class ProfileComponent {
 
   loadProfileData() {
     this.profileData$ = this.dataService.getProfileData().pipe(
+      tap(value => console.log("ค่าของ Profile เป็น:" + value)),
       delay(1000),
       catchError((error) => {
         console.error('Error fetching profile data:', error);
@@ -64,6 +65,7 @@ export class ProfileComponent {
 
   loadTasksData() {
     this.tasksData$ = this.dataService.getTasksData().pipe(
+      tap(value => console.log("ค่าจาก Task เป็น:" + value)),
       delay(1500),
       catchError((error) => {
         console.error('Error fetching tasks data:', error);
@@ -86,5 +88,30 @@ export class ProfileComponent {
     } else {
       console.error('Invalid task ID:', searchTaskId);
     }
+  }
+
+  tap(fn: (value: any) => void) {
+    return (source: Observable<any>) =>
+      new Observable(observer => {
+        console.log("subscribe!");
+        const subscription = source.subscribe({
+          next: (value: any) => {
+            // side effect
+            fn(value);
+            observer.next(value);
+          },
+          error: err => {
+            observer.error(err);
+          },
+          complete: () => {
+            observer.complete();
+          }
+        });
+
+        return () => {
+          console.log("unsubscribe!");
+          subscription.unsubscribe();
+        };
+      });
   }
 }
