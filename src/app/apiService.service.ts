@@ -4,14 +4,13 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
-
   private apiUrlProfile = 'http://103.13.31.37:17444/api/my/profile';
   private apiUrlTasks = 'http://103.13.31.37:17444/api/tasks';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getProfileData(): Observable<any> {
     return this.http.get(this.apiUrlProfile).pipe(
