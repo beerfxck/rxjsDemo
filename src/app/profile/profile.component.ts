@@ -83,11 +83,7 @@ export class ProfileComponent {
 
   searchId(searchTaskId: string): void {
     const taskIdAsNumber: number = parseInt(searchTaskId, 10);
-    if (!isNaN(taskIdAsNumber)) {
-      this.onSearchTask.next(taskIdAsNumber);
-    } else {
-      console.error('Invalid task ID:', searchTaskId);
-    }
+    this.onSearchTask.next(taskIdAsNumber);
   }
 
   tap(fn: (value: any) => void) {
