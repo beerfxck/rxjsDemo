@@ -36,15 +36,8 @@ export class ProfileComponent {
   ngOnInit() {
     this.loadProfileData();
     this.loadTasksData();
-    const tasksDataId$: Observer<any> = {
-      next: (value: any) => console.log("tasksDataId next", value),
-      error: (err: any) => console.log("tasksDataId error", err),
-      complete: () => console.log("tasksDataId complete")
-    };
-
-    this.tasksIdData$ = this.tripleRequestTask();
-    this.tasksIdData$.subscribe(tasksDataId$);
-
+    
+    this.tripleRequestTask();
   }
 
   loadProfileData() {
@@ -73,7 +66,8 @@ export class ProfileComponent {
     const tasks1$ = this.dataService.getTasksID(1);
     const tasks2$ = this.dataService.getTasksID(2);
     const tasks3$ = this.dataService.getTasksID(3);
-    return forkJoin([tasks1$, tasks2$, tasks3$]);
+
+    this.tasksIdData$ = forkJoin([tasks1$, tasks2$, tasks3$]);
   }
 
   searchId(searchTaskId: string): void {
