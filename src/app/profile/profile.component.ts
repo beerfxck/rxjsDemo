@@ -12,8 +12,6 @@ export class ProfileComponent {
   tasksData$!: Observable<any[]>;
   tasksIdData$!: Observable<any[]>;
   
-
-
   tasksIdBySearchData$: Observable<any[]> | undefined;
   onSearchTask = new Subject<number>();
 
@@ -35,9 +33,6 @@ export class ProfileComponent {
       });
   }
 
-
-
-
   ngOnInit() {
     this.loadProfileData();
     this.loadTasksData();
@@ -54,7 +49,7 @@ export class ProfileComponent {
 
   loadProfileData() {
     this.profileData$ = this.dataService.getProfileData().pipe(
-      tap(value => console.log("ค่าของ Profile เป็น:" + value)),
+      tap(value => console.log("ค่าของ Profile เป็น:" + value.avatar)),
       delay(1000),
       catchError((error) => {
         console.error('Error fetching profile data:', error);
@@ -82,7 +77,7 @@ export class ProfileComponent {
   }
 
   searchId(searchTaskId: string): void {
-    const taskIdAsNumber: number = parseInt(searchTaskId, 10);
+    const taskIdAsNumber: number = Number(searchTaskId);
     this.onSearchTask.next(taskIdAsNumber);
   }
 

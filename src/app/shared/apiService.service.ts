@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable, Subject, throwError } from 'rxjs';
+import { catchError, map, takeUntil, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,14 @@ export class ApiService {
   getProfileData(): Observable<any> {
     return this.http.get(this.apiUrlProfile).pipe(
       catchError(this.handleError),
-      map((data: any) => data)
+      map((data: any) => ({
+        id: data.id,
+        avatar: data.avatar,
+        name: data.name,
+        job: data.job,
+        followers: data.followers,
+        following: data.following,
+      }))
     );
   }
 
@@ -28,7 +35,6 @@ export class ApiService {
 
   getTasksID(id: number): Observable<any> {
     const apiUrlGetTasksId = `http://103.13.31.37:17444/api/tasks/${id}}`;
-
     return this.http.get(apiUrlGetTasksId).pipe(
       catchError(this.handleError),
       map((data: any) => data)
@@ -44,10 +50,8 @@ export class ApiService {
     );
   }
 
-
   private handleError(error: any) {
     console.error('An error occurred:', error);
     return throwError(error);
   }
 }
-  

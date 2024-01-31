@@ -27,7 +27,7 @@
 
 <div>
   <h2>Search TaskById:</h2>
-  <input #searchInput (input)="searchId(searchInput.value)">
+  <input type='number' #searchInput (input)="searchId(searchInput.value)">
   <div *ngIf="tasksIdBySearchData$ | async as tasksIdBySearchData">
     <ul>
       <li *ngFor="let task of tasksIdBySearchData">
