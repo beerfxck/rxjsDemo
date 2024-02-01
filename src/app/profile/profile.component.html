@@ -29,13 +29,18 @@
   <h2>Search TaskById:</h2>
   <input type='number' #searchInput (input)="searchId(searchInput.value)">
   <div *ngIf="tasksIdBySearchData$ | async as tasksIdBySearchData">
+    <strong>Description:</strong> {{ tasksIdBySearchData.description }}
+  </div>
+ 
+</div>
+
+ <!-- <div *ngIf="tasksIdBySearchData$ | async as tasksIdBySearchData">
     <ul>
       <li *ngFor="let task of tasksIdBySearchData">
         <strong>{{ task.name }}</strong> - {{ task.description }} ({{ task.date | date: "yyyy-MM-dd" }})
       </li>
+      <strong>{{ tasksIdBySearchData.description }}</strong>
     </ul>
-  </div>
-</div>
-
+  </div> -->
 
 </div>
