@@ -37,14 +37,14 @@ export class ProfileComponent {
     this.onSearchTask.pipe(
       debounceTime(500),
       switchMap((searchTaskId) => {
-        return this.dataService.getTasksIdBySearch(searchTaskId);
+        return this.dataService.getTasksID(searchTaskId);
       })
     )
       .subscribe((value) => {
-        if (typeof value === 'object' && value !== null) {
+        if (typeof value === 'object' ) {
           this.tasksIdBySearchData$ = of(value);
         } else {
-          console.error('Invalid data returned:', value);
+          console.error(value);
         }
       });
   }
