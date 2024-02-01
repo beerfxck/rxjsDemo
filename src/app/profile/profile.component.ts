@@ -41,7 +41,7 @@ export class ProfileComponent {
       })
     )
       .subscribe((value) => {
-        if (typeof value === 'object' ) {
+        if (typeof value == 'object' ) {
           this.tasksIdBySearchData$ = of(value);
         } else {
           console.error(value);
