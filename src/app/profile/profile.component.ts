@@ -22,7 +22,9 @@ export class ProfileComponent {
         return this.dataService.getTasksID(searchTaskId);
       })
     )
-      .subscribe((value) => (this.tasksIdBySearchData$ = of(value)));
+      .subscribe((value) => (this.tasksIdBySearchData$ = of(console.log("123")),
+      this.tasksIdBySearchData$ = of(value)
+      ));
   }
 
   ngOnInit() {
