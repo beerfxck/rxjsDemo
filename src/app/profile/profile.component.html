@@ -31,7 +31,6 @@
   <div *ngIf="tasksIdBySearchData$ | async as tasksIdBySearchInfo">
     <li><strong>{{ tasksIdBySearchInfo.name }}</strong> - {{ tasksIdBySearchInfo.description }} ({{ tasksIdBySearchInfo.date | date : "short" }}) </li>
   </div>
- 
 </div>
 
  <!-- <div *ngIf="tasksIdBySearchData$ | async as tasksIdBySearchData">

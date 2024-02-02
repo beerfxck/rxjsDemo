@@ -15,24 +15,6 @@ export class ProfileComponent {
   tasksIdBySearchData$!: Observable<any>;
   onSearchTask = new Subject<number>();
 
-  // constructor(private dataService: ApiService) {
-  //   this.onSearchTask.pipe(
-  //     debounceTime(500),
-  //     switchMap((searchTaskId) => {
-  //       return this.dataService.getTasksIdBySearch(searchTaskId);
-  //     })
-  //   )
-  //     .subscribe((value) =>(this.tasksIdBySearchData$ = value)
-  //       // if (Array.isArray(value)) {
-  //       //   this.tasksIdBySearchData$ = of(value);
-  //       // } else if (typeof value === 'object' && value !== null) {
-  //       //   this.tasksIdBySearchData$ = of([value]);
-  //       // } else {
-  //       //   console.error('Invalid data returned:', value);
-  //       // }
-  //     );
-  // }
-
   constructor(private dataService: ApiService) {
     this.onSearchTask.pipe(
       debounceTime(500),
@@ -40,13 +22,7 @@ export class ProfileComponent {
         return this.dataService.getTasksID(searchTaskId);
       })
     )
-      .subscribe((value) => {
-        if (typeof value == 'object' ) {
-          this.tasksIdBySearchData$ = of(value);
-        } else {
-          console.error(value);
-        }
-      });
+      .subscribe((value) => (this.tasksIdBySearchData$ = of(value)));
   }
 
   ngOnInit() {
@@ -87,7 +63,7 @@ export class ProfileComponent {
   }
 
   searchId(searchTaskId: string): void {
-    const taskIdAsNumber: number = Number(searchTaskId);
+    const taskIdAsNumber = Number(searchTaskId);
     this.onSearchTask.next(taskIdAsNumber);
   }
 
